@@ -18,9 +18,9 @@ public class PersonSorter
 				int compareName = o1.getName().compareTo(o2.getName());
 				if (compareName != 0)
 				{
-					return compareName;
+					return -compareName;
 				}
-				return o1.getAge() - o2.getAge();
+				return o2.getAge() - o1.getAge();
 			}
 		});
 
@@ -35,7 +35,7 @@ public class PersonSorter
 	private void sortUsingLambda(final List<Person> personList)
 	{
 
-		Collections.sort(personList, (p1, p2) -> p1.getName().compareTo(p2.getName()));
+		Collections.sort(personList, (p1, p2) -> p2.getName().compareTo(p1.getName()));
 		System.out.println("Using lambda: ");
 		for (Person person : personList)
 		{
