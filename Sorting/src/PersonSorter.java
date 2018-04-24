@@ -32,6 +32,19 @@ public class PersonSorter
 	}
 
 
+	private void sortUsingLambda(final List<Person> personList)
+	{
+
+		Collections.sort(personList, (p1, p2) -> p1.getName().compareTo(p2.getName()));
+		System.out.println("Using lambda: ");
+		for (Person person : personList)
+		{
+			System.out.println(person.toString());
+		}
+
+	}
+
+
 	public static void main(final String[] args)
 	{
 		Person p1 = new Person();
@@ -55,6 +68,9 @@ public class PersonSorter
 
 		System.out.println("------------");
 		new PersonSorter().sortUsingComparator(personList);
+
+		System.out.println("-------------");
+		new PersonSorter().sortUsingLambda(personList);
 
 	}
 
