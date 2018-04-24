@@ -45,6 +45,15 @@ public class PersonSorter
 	}
 
 
+	private void sortUsingStreamLambda(final List<Person> personList)
+	{
+
+		System.out.println("Using Stream: ");
+		personList.stream().sorted(Comparator.comparing(Person::getAge).thenComparing(Person::getName).reversed()).forEach(System.out::println);
+
+	}
+
+
 	public static void main(final String[] args)
 	{
 		Person p1 = new Person();
@@ -71,6 +80,9 @@ public class PersonSorter
 
 		System.out.println("-------------");
 		new PersonSorter().sortUsingLambda(personList);
+
+		System.out.println("--------------");
+		new PersonSorter().sortUsingStreamLambda(personList);
 
 	}
 
