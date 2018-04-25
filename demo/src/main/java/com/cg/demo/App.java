@@ -1,39 +1,77 @@
 package com.cg.demo;
 
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class App
 {
+
 	public static void main(final String[] args)
 	{
+		DBase db = new DBase();
+		Connection conn = db.connect("jdbc:oracle:thin:@localhost:1521:xe", "system", "Niki10@pas");
 
-		String[] springConfig = { "spring/batch/config/database.xml",
-		        "spring/batch/config/context.xml",
-		        "spring/batch/jobs/job-report.xml"
-		};
+		db.importData(conn, "D:\\moeve-ide\\workspaces\\main\\nikita965\\demo\\src\\main\\resources\\csv\\report.csv");
+		System.out.println("bsdcvbdw");
+	}
 
-		ApplicationContext context = new ClassPathXmlApplicationContext(springConfig);
+}
 
-		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-		Job job = (Job) context.getBean("reportJob");
+class DBase
+{
+	public DBase()
+	{
+	}
 
+
+	public Connection connect(final String db_connect_str,
+	        final String db_userid, final String db_password)
+	{
+		Connection conn;
 		try
 		{
+			Class.forName(
+			        "oracle.jdbc.driver.OracleDriver").newInstance();
 
-			JobExecution execution = jobLauncher.run(job, new JobParameters());
-			System.out.println("Exit Status : " + execution.getStatus());
+			conn = DriverManager.getConnection(db_connect_str,
+			        db_userid, db_password);
 
 		} catch (Exception e)
 		{
 			e.printStackTrace();
+			conn = null;
 		}
 
-		System.out.println("Done");
-
+		return conn;
 	}
-}
+
+
+	public void importData(final Connection conn, final String filename)
+	{
+		Statement stmt;
+		String query;
+		// filename="D:\moeve-ide\workspaces\main\nikita965\demo\src\main\resources\csv\report.csv";
+
+		try
+		{
+			stmt = conn.createStatement(
+			        ResultSet.TYPE_SCROLL_SENSITIVE,
+			        ResultSet.CONCUR_UPDATABLE);
+
+			System.out.println("jsgfsa");
+
+			query = "LOAD DATA INFILE '" + filename + "' INTO TABLE Person  FIELDS TERMINATED BY ',' (name,age)";
+
+			System.out.println(query);
+
+			stmt.executeUpdate(query);
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			stmt = null;
+		}
+	}
+};
