@@ -20,7 +20,7 @@ public class App
 		        + "(name, age) VALUES"
 		        + "(?,?)";
 		sql_statement = conn.prepareStatement(jdbc_insert_sql);
-		/* Read CSV file in OpenCSV */
+		/* Read CSV file */
 		String inputCSVFile = "D:\\moeve-ide\\workspaces\\main\\nikita965\\demo\\src\\main\\resources\\csv\\report.csv";
 		CSVReader reader = new CSVReader(new FileReader(inputCSVFile));
 		String[] nextLine;
@@ -31,14 +31,13 @@ public class App
 			lnNum++;
 			/* Bind CSV file input to table columns */
 			sql_statement.setString(1, nextLine[0]);
-			/* Bind Age as double */
-			/* Need to convert string to double here */
+
 			sql_statement.setString(2, nextLine[1]);
 			// Add the record to batch
 			sql_statement.addBatch();
 		}
 		// We are now ready to perform a bulk batch insert
-		int[] totalRecords = new int[4];
+		int[] totalRecords = new int[100];
 		try
 		{
 			totalRecords = sql_statement.executeBatch();
